@@ -104,6 +104,11 @@ class Binary_Cross_entropy():
         y_hat = np.clip(y_hat, self.eps, 1 - self.eps)
         return -np.mean(y * np.log(y_hat) + (1 - y) * np.log(1 - y_hat))
 
+    def backward(self, y: np.ndarray, y_hat: np.ndarray) -> np.ndarray:
+        """Return the gradient of the mean loss w.r.t. ``y_hat``."""
+        y_hat = np.clip(y_hat, self.eps, 1 - self.eps)
+        return (y_hat - y) / (y_hat * (1 - y_hat)) / len(y)
+
 class ANN(Model):
     """Two-layer network for binary classification.
 
@@ -147,17 +152,18 @@ class ANN(Model):
         Stops after ``max_epochs`` or once the loss is at most ``target_error``.
         Returns ``self`` so calls can be chained.
         """
+        y = y.reshape(-1, 1)  # match the (n_samples, 1) shape of the output
         for epoch in range (max_epochs):
             prediction = self(X)
             loss = self.loss_fn(y, prediction)
             if loss <= target_error:
                 break
-            self.backward()
+            self.backward(self.loss_fn.backward(y, prediction))
             self.step(learning_rate)
 
         return self
 
-    def predict(self, x: np.ndarray, threshold: float = 0.5) -> int:
+    def predict(self, x: np.ndarray, threshold: float = 0.5) -> np.ndarray:
         """Return 0/1 class labels: 1 where the output probability is >= ``threshold``."""
         prediction = self(x)
         return (prediction >= threshold).astype(int)

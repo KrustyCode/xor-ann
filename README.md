@@ -10,6 +10,8 @@ Requires Python 3.10+.
 git clone https://github.com/KrustyCode/xor-ann.git
 ```
 
+or `Download the ZIP file and extract it`
+
 ```bash
 pip install -r requirements.txt
 ```
@@ -20,7 +22,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Prints the predicted class (0 or 1) for each XOR input.
+Prints the accuracy, the predicted class (0 or 1) for each XOR input, and the true labels.
 
 ## Files
 
@@ -30,7 +32,7 @@ Prints the predicted class (0 or 1) for each XOR input.
 | `data.py`         | XOR dataset (`X`, `y`)                                      |
 | `model.py`        | Layers (`Linear`, `ReLU`, `Sigmoid`), BCE loss, `ANN` model |
 | `main.py`         | Builds, trains and evaluates the model                      |
-| `requirements.py` | Python dependencies (pip install -r requirements.txt)       |
+| `requirements.txt` | Python dependencies (`pip install -r requirements.txt`)    |
 
 ## Model
 
